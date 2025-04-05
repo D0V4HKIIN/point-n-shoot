@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://dphadpbq5yjyv"]
+[gd_scene load_steps=12 format=3 uid="uid://dphadpbq5yjyv"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_1v3rh"]
 [ext_resource type="Script" path="res://player.gd" id="1_8xmhk"]
 [ext_resource type="Texture2D" uid="uid://cex683065iw13" path="res://textures/grass.jpg" id="1_w5503"]
+[ext_resource type="PackedScene" uid="uid://rhv1jhwyxha6" path="res://camera/Camera.glb" id="3_o4mf3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mt75v"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -57,3 +58,6 @@ script = ExtResource("1_8xmhk")
 shape = SubResource("CapsuleShape3D_1bt4f")
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
+
+[node name="Camera" parent="CharacterBody3D" instance=ExtResource("3_o4mf3")]
+transform = Transform3D(-0.05, 7.54979e-09, -3.30012e-16, 0, -2.18557e-09, -0.05, -7.54979e-09, -0.05, 2.18557e-09, 0.044, -0.41, -0.002)

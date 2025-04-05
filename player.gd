@@ -9,6 +9,9 @@ extends CharacterBody3D
 var camera_input_direction := Vector2.ZERO
 
 @onready var camera: Camera3D = $Camera3D
+@onready var camera_model = $Camera
+
+var photoMode = false
 
 
 func _input(event: InputEvent) -> void:
@@ -35,6 +38,29 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	camera.rotation.x += camera_input_direction.y * delta
 	camera.rotation.y += camera_input_direction.x * delta
+	camera_model.rotation.y += camera_input_direction.x * delta
+	var np = camera.position - camera.global_basis.z / 4 - camera.global_basis.y / 10
+	camera_model.position.x = np.x
+	camera_model.position.z = np.z
+	
+	
+	if Input.is_action_just_pressed("camera"):
+		photoMode = !photoMode
+		#camera_model.rotation.x = PI/2
+		#camera_model.position.y = -0.41
+		if photoMode:
+			var p = camera.position - camera.global_basis.z / 4 - camera.global_basis.y / 10
+			var tween = get_tree().create_tween()
+			
+			tween.tween_property(camera_model, "position", p, 0.4)
+			tween.parallel().tween_property(camera_model, "rotation:x", -camera.rotation.x, 0.4)
+			#camera_model.rotation.x = -camera.rotation.x
+			#camera_model.position = p
+		else:
+			var tween = get_tree().create_tween()
+			tween.tween_property(camera_model, "position:y", -0.41, 0.4)
+			tween.parallel().tween_property(camera_model, "rotation:x", PI/2, 0.4)
+			
 
 	camera_input_direction = Vector2.ZERO
 	
