@@ -1,0 +1,59 @@
+[gd_scene load_steps=11 format=3 uid="uid://dphadpbq5yjyv"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_1v3rh"]
+[ext_resource type="Script" path="res://player.gd" id="1_8xmhk"]
+[ext_resource type="Texture2D" uid="uid://cex683065iw13" path="res://textures/grass.jpg" id="1_w5503"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mt75v"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_qvhqr"]
+sky_material = SubResource("ProceduralSkyMaterial_mt75v")
+
+[sub_resource type="Environment" id="Environment_p7acy"]
+background_mode = 2
+sky = SubResource("Sky_qvhqr")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ykjhu"]
+size = Vector3(100, 1, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m30g5"]
+albedo_texture = ExtResource("1_w5503")
+uv1_scale = Vector3(100, 100, 100)
+
+[sub_resource type="BoxMesh" id="BoxMesh_l64jc"]
+material = SubResource("StandardMaterial3D_m30g5")
+size = Vector3(100, 1, 100)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1bt4f"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_1v3rh")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_p7acy")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_ykjhu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_l64jc")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56377, 0)
+script = ExtResource("1_8xmhk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_1bt4f")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]

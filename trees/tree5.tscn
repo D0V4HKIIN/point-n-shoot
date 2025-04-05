@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqnuphsj0i8gv"]
+
+[ext_resource type="PackedScene" uid="uid://dv7iadapbf3ya" path="res://trees/tree5.glb" id="1_mwyut"]
+
+[node name="Tree5" type="Node3D"]
+
+[node name="markers" type="Node" parent="."]
+
+[node name="Marker3D" type="Marker3D" parent="markers"]
+transform = Transform3D(-0.833915, 0.0369342, -0.550656, 0.0442468, 0.999021, -6.51856e-11, 0.550116, -0.0243647, -0.834733, 0, -0.106991, -0.238678)
+
+[node name="Marker3D2" type="Marker3D" parent="markers"]
+transform = Transform3D(0.920638, 0.224193, 0.31963, -0.202843, 0.974188, -0.099058, -0.333588, 0.0263619, 0.942351, -0.468163, 1.38092, 0.417361)
+
+[node name="tree5" parent="." instance=ExtResource("1_mwyut")]
