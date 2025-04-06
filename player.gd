@@ -72,7 +72,10 @@ func _unhandled_input(event: InputEvent) -> void:
 				physical_camera.attributes.exposure_aperture = apertures[current_aperture]
 				aperture_changed.emit()
 		else:
-			physical_camera.attributes.frustum_focal_length += 1
+			if physical_camera.attributes.frustum_focal_length < 200:
+				physical_camera.attributes.frustum_focal_length += 1
+			else:
+				physical_camera.attributes.frustum_focal_length += 10
 			focal_length_changed.emit()
 	
 	if event.is_action("zoom_out"):
@@ -91,7 +94,10 @@ func _unhandled_input(event: InputEvent) -> void:
 				physical_camera.attributes.exposure_aperture = apertures[current_aperture]
 				aperture_changed.emit()
 		else:
-			physical_camera.attributes.frustum_focal_length -= 1
+			if physical_camera.attributes.frustum_focal_length < 200:
+				physical_camera.attributes.frustum_focal_length -= 1
+			else:
+				physical_camera.attributes.frustum_focal_length -= 10
 			focal_length_changed.emit()
 
 func set_new_camera():
@@ -110,6 +116,13 @@ func _physics_process(delta: float) -> void:
 	var np = camera.position - camera.global_basis.z / 4 - camera.global_basis.y / 10
 	camera_model.position.x = np.x
 	camera_model.position.z = np.z
+	
+	if Input.is_action_just_pressed("duck"):
+		$CollisionShape3D.scale.y *= 0.35
+	
+	if Input.is_action_just_released("duck"):
+		$CollisionShape3D.scale.y = 1.0
+		
 	
 	
 	if Input.is_action_just_pressed("camera"):
