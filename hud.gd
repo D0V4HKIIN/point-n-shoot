@@ -24,4 +24,4 @@ func _on_character_body_3d_shutter_speed_changed() -> void:
 
 
 func _on_character_body_3d_aperture_changed() -> void:
-	aperture.text = "(meta) Aperture = f" + str(snapped(att.exposure_aperture, 0.1))
+	aperture.text = "(e) Aperture = f" + str(snapped(att.exposure_aperture, 0.1))

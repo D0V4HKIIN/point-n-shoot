@@ -13,8 +13,10 @@ const sparrow = preload("res://birb/Sparrow.glb")
 const humming = preload("res://birb/Hummingbird.glb")
 const western_blue = preload("res://birb/Western bluebird.glb")
 const parrot = preload("res://birb/Parrot.glb")
+const frog = preload("res://birb/Frog.glb")
+const frogonfrog = preload("res://birb/Frogonfrog.glb")
 
-const birds = [parrot, sparrow, humming, western_blue]
+const birds = [parrot, sparrow, humming, western_blue, frog, frogonfrog]
 
 var random = RandomNumberGenerator.new()
 

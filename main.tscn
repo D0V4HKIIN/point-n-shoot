@@ -101,7 +101,7 @@ offset_left = 527.0
 offset_top = 900.0
 offset_right = 688.0
 offset_bottom = 923.0
-text = "(meta) Aperture: f4.5"
+text = "(e) Aperture: f4.5"
 
 [node name="shutter speed" type="Label" parent="HUD"]
 offset_left = 800.0
