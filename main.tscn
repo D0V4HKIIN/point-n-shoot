@@ -1,22 +1,25 @@
-[gd_scene load_steps=12 format=3 uid="uid://dphadpbq5yjyv"]
+[gd_scene load_steps=16 format=3 uid="uid://dphadpbq5yjyv"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_1v3rh"]
 [ext_resource type="Script" path="res://player.gd" id="1_8xmhk"]
 [ext_resource type="Texture2D" uid="uid://cex683065iw13" path="res://textures/grass.jpg" id="1_w5503"]
 [ext_resource type="PackedScene" uid="uid://rhv1jhwyxha6" path="res://camera/Camera.glb" id="3_o4mf3"]
+[ext_resource type="Script" path="res://hud.gd" id="5_iqw5c"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mt75v"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ourbx"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
-[sub_resource type="Sky" id="Sky_qvhqr"]
-sky_material = SubResource("ProceduralSkyMaterial_mt75v")
+[sub_resource type="Sky" id="Sky_og265"]
+sky_material = SubResource("ProceduralSkyMaterial_ourbx")
 
-[sub_resource type="Environment" id="Environment_p7acy"]
+[sub_resource type="Environment" id="Environment_m830w"]
 background_mode = 2
-sky = SubResource("Sky_qvhqr")
+sky = SubResource("Sky_og265")
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_1lmep"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ykjhu"]
 size = Vector3(100, 1, 100)
@@ -31,15 +34,23 @@ size = Vector3(100, 1, 100)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1bt4f"]
 
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_j8xkl"]
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_rwc4q"]
+frustum_focal_length = 80.0
+exposure_aperture = 4.5
+exposure_shutter_speed = 500.0
+
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_1v3rh")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
-shadow_enabled = true
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_p7acy")
+environment = SubResource("Environment_m830w")
+camera_attributes = SubResource("CameraAttributesPractical_1lmep")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -58,6 +69,56 @@ script = ExtResource("1_8xmhk")
 shape = SubResource("CapsuleShape3D_1bt4f")
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
+attributes = SubResource("CameraAttributesPractical_j8xkl")
+current = true
+
+[node name="PhysicalCamera3D" type="Camera3D" parent="CharacterBody3D/Camera3D"]
+unique_name_in_owner = true
+attributes = SubResource("CameraAttributesPhysical_rwc4q")
 
 [node name="Camera" parent="CharacterBody3D" instance=ExtResource("3_o4mf3")]
 transform = Transform3D(-0.05, 7.54979e-09, -3.30012e-16, 0, -2.18557e-09, -0.05, -7.54979e-09, -0.05, 2.18557e-09, 0.044, -0.41, -0.002)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("5_iqw5c")
+
+[node name="Focal length" type="Label" parent="HUD"]
+offset_left = 10.0
+offset_top = 900.0
+offset_right = 217.0
+offset_bottom = 923.0
+text = "(scroll) Focal length: 80mm"
+
+[node name="focus dist" type="Label" parent="HUD"]
+offset_left = 230.0
+offset_top = 900.0
+offset_right = 426.0
+offset_bottom = 923.0
+text = "(ctrl) Focus distance: 10m"
+
+[node name="aperture" type="Label" parent="HUD"]
+offset_left = 527.0
+offset_top = 900.0
+offset_right = 688.0
+offset_bottom = 923.0
+text = "(meta) Aperture: f4.5"
+
+[node name="shutter speed" type="Label" parent="HUD"]
+offset_left = 800.0
+offset_top = 900.0
+offset_right = 1002.0
+offset_bottom = 923.0
+text = "(alt) Shutter speed: 1/500s"
+
+[node name="ISO" type="Label" parent="HUD"]
+offset_left = 1024.0
+offset_top = 900.0
+offset_right = 1127.0
+offset_bottom = 923.0
+text = "(tab) ISO: 100"
+
+[connection signal="aperture_changed" from="CharacterBody3D" to="HUD" method="_on_character_body_3d_aperture_changed"]
+[connection signal="focal_length_changed" from="CharacterBody3D" to="HUD" method="_on_character_body_3d_focal_length_changed"]
+[connection signal="focus_changed" from="CharacterBody3D" to="HUD" method="_on_character_body_3d_focus_changed"]
+[connection signal="iso_changed" from="CharacterBody3D" to="HUD" method="_on_character_body_3d_iso_changed"]
+[connection signal="shutter_speed_changed" from="CharacterBody3D" to="HUD" method="_on_character_body_3d_shutter_speed_changed"]
