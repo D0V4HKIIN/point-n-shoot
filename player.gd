@@ -11,9 +11,12 @@ var camera_input_direction := Vector2.ZERO
 @onready var camera: Camera3D = $Camera3D
 @onready var camera_model = $Camera
 @onready var physical_camera = $Camera3D/PhysicalCamera3D
+@onready var hud = %HUD
+@onready var soundplayer = $AudioStreamPlayer3D
+
 
 var photoMode = false
-var current_aperture = 0
+var current_aperture = 2
 var apertures = [4.5, 4.5, 5.6, 5.6, 6.7, 6.7, 8, 8, 9.5, 9.5, 11, 11, 13, 13, 16, 16, 22, 22, 32]
 
 signal focus_changed
@@ -28,6 +31,18 @@ func _input(event: InputEvent) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	elif event.is_action_pressed("left_click"):
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		if photoMode:
+			hud.visible = false
+			soundplayer.play(2.1)
+			await get_tree().process_frame
+			await get_tree().process_frame
+			var i = 0
+			var filename = "./photos/photo" + str(i) + ".png"
+			while FileAccess.file_exists(filename):
+				i += 1
+				filename = "./photos/photo" + str(i) + ".png"
+			physical_camera.get_viewport().get_texture().get_image().save_png(filename)
+			hud.visible = true
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -99,6 +114,7 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("camera"):
 		photoMode = !photoMode
+		hud.visible = !hud.visible
 		#camera_model.rotation.x = PI/2
 		#camera_model.position.y = -0.41
 		if photoMode:
